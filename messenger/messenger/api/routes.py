@@ -35,7 +35,6 @@ async def check_db_con(request: web.Request) -> web.Response:
                             content_type='application/json')
 
 
-
 def setup_routes(app) -> None:
     app.router.add_view(r"/v1/chats", views.Chat)
     app.router.add_view(r"/v1/chats/", views.Chat)
@@ -49,10 +48,13 @@ def setup_routes(app) -> None:
     app.router.add_view(r'/v1/autorisation', views.Autorisation)
     app.router.add_view(r'/v1/autorisation/', views.Autorisation)
 
-    app.router.add_view(r'/v1/chats/search' , search.MakeTask)
-    app.router.add_view(r'/v1/chats/search/' , search.MakeTask)
+    app.router.add_view(r'/v1/chats/search', search.MakeTask)
+    app.router.add_view(r'/v1/chats/search/', search.MakeTask)
 
-    app.router.add_view(r'/v1/chats/search/status/{task_id}' , search.StatusTask)
-    app.router.add_view(r'/v1/chats/search/status/{task_id}/' , search.StatusTask)
+    app.router.add_view(r'/v1/chats/search/status/{task_id}', search.StatusTask)
+    app.router.add_view(r'/v1/chats/search/status/{task_id}/', search.StatusTask)
+
+    app.router.add_view(r'/v1/chats/search/{task_id}/messages', search.TaskContent)
+    app.router.add_view(r'/v1/chats/search/{task_id}/messages/', search.TaskContent)
 
     app.add_routes(routes)

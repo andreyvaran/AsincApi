@@ -1,10 +1,11 @@
+import asyncio
 import datetime
 
 
 def datetime_with_delta(timedelta: float):
     try:
         timedelta = float(timedelta)
-    except TypeError as e :
+    except TypeError as e:
         timedelta = 0
 
     now = datetime.datetime.now()
@@ -29,3 +30,20 @@ def get_str_hellow(date: datetime.datetime) -> str:
         return str('Good evening')
 
 
+async def del_old_result(app):
+    while True:
+        await asyncio.sleep(60)
+        print("INFO: Start del old tasks: ", )
+        print(app.task_dict)
+        for i in app.task_dict.keys:
+            try:
+                task = app.task_dict[i][0].result()
+                delta = datetime.now() - app.task_dict[i][1]
+                if delta.seconds > 60:
+                    del app.task_dict[i]
+            except asyncio.CancelledError:
+                pass
+            except asyncio.InvalidStateError:
+                pass
+        print(app.task_dict)
+        print('INFO: Old task deleted: ', datetime.datetime.now())

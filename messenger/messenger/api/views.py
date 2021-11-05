@@ -6,6 +6,7 @@ from functools import lru_cache
 from aiohttp import web
 
 # from messenger.messenger.db.check_db import check_db ,check_db_for_smart
+from async_lru import alru_cache
 
 from messenger.schema.schema import SchemaChat, SchemaUser, SchemaMessage, \
     SchemaLimit, SchemaUserAutorisatin
@@ -161,7 +162,7 @@ class Message(web.View):
             return web.Response(status=404, body=json.dumps({'Error': 'no chat with this name'}),
                                 content_type='application/json')
 
-    @lru_cache(maxsize=128)
+    @alru_cache(maxsize=128)
     async def get(self):
         user_id = self.request.headers.get('user_id', '')
         if self.request.app['AUTH_DISABLED']:

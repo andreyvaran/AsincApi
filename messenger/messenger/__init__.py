@@ -1,3 +1,5 @@
+import asyncio
+
 from aiohttp import web
 import logging
 
@@ -9,6 +11,7 @@ from cnf import DB_CONNECTION_STR, DB_CONNECTION_STR_SYNC, AUTH_DISABLED
 
 from messenger.db.post_data import post_admin
 from messenger.secod_base.users_cvc import set_one_user
+from messenger.tools import del_old_result
 
 
 def setup_routes(app: web.Application) -> None:
@@ -49,15 +52,24 @@ def main() -> None:
     app['admin_username'] = 'perevoshikov'
     app['admin_password'] = 'qwertyuiop'
     app['admin_uuid'] = '0f87bf68-3144-4a2b-a89c-2583120e4fb0'
-    app['AUTH_DISABLED'] = AUTH_DISABLED in ['True' , 'true']
+    app['AUTH_DISABLED'] = AUTH_DISABLED in ['True', 'true']
+    # Возможно лучше использовать очередь для хранения, однако в ней нельзя доставать элементы за О(1), но удобнее удалять
+
     app.task_dict = dict()
+    #
+    # task = asyncio.create_task(del_old_result(app))
+    # task = asyncio.create_task(del_old_result(app))
+    # app['task'] =   task
+    # await app['task']
+
     try:
         # Если пользователь админ не создан , то создает его при запуске
         post_admin(app['db_url_sync'], app['admin_username'], app['admin_password'], app['admin_uuid'], 3)
     except sqlalchemy.exc.IntegrityError:
         print('Admin alredy existes')
-
+    # await task
     # app.cache =
+
     setup_routes(app)
     setup_middlewares(app)
     # logging.basicConfig(level=logging.DEBUG)
