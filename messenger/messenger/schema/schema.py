@@ -1,3 +1,4 @@
+import uuid
 from typing import Optional
 
 from pydantic import validator, BaseModel, Field, ValidationError
@@ -26,6 +27,9 @@ class SchemaChat(BaseModel):
         if len(chat_name) > 255:
             raise ValidationError('To many symbols in chat_id')
         return chat_name
+
+class SchemaTask(BaseModel):
+    task_id: str = Field(alias='task_id',  default=None)
 
 
 class SchemaUser(BaseModel):

@@ -50,6 +50,7 @@ def main() -> None:
     app['admin_password'] = 'qwertyuiop'
     app['admin_uuid'] = '0f87bf68-3144-4a2b-a89c-2583120e4fb0'
     app['AUTH_DISABLED'] = AUTH_DISABLED in ['True' , 'true']
+    app.task_dict = dict()
     try:
         # Если пользователь админ не создан , то создает его при запуске
         post_admin(app['db_url_sync'], app['admin_username'], app['admin_password'], app['admin_uuid'], 3)
@@ -59,8 +60,9 @@ def main() -> None:
     # app.cache =
     setup_routes(app)
     setup_middlewares(app)
-    logging.basicConfig(level=logging.DEBUG)
-    web.run_app(app, access_log_class=AccessLogger, port=8080)
+    # logging.basicConfig(level=logging.DEBUG)
+    # , access_log_class=AccessLogger
+    web.run_app(app, port=8080)
 
 
 if __name__ == '__main__':

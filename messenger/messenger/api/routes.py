@@ -3,6 +3,7 @@ import json
 from aiohttp import web
 
 from messenger.api import views
+from messenger.api import search
 
 routes = web.RouteTableDef()
 
@@ -47,5 +48,11 @@ def setup_routes(app) -> None:
     #
     app.router.add_view(r'/v1/autorisation', views.Autorisation)
     app.router.add_view(r'/v1/autorisation/', views.Autorisation)
+
+    app.router.add_view(r'/v1/chats/search' , search.MakeTask)
+    app.router.add_view(r'/v1/chats/search/' , search.MakeTask)
+
+    app.router.add_view(r'/v1/chats/search/status/{task_id}' , search.StatusTask)
+    app.router.add_view(r'/v1/chats/search/status/{task_id}/' , search.StatusTask)
 
     app.add_routes(routes)
